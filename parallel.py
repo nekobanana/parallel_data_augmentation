@@ -28,21 +28,24 @@ def process_image(filename, input_dir, output_dir, num_augmented):
 
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-    with multiprocessing.Pool(processes=min(num_augmented, multiprocessing.cpu_count())) as pool:
-        pool.starmap(apply_transformation,
-                     [(image, output_dir, filename, i) for i in range(num_augmented)])
+    for i in range(num_augmented):
+        apply_transformation(image, output_dir, filename, i)
+
+    # with multiprocessing.Pool(processes=min(num_augmented, multiprocessing.cpu_count())) as pool:
+    #     pool.starmap(apply_transformation,
+    #                  [(image, output_dir, filename, i) for i in range(num_augmented)])
 
 
 def augment_images(input_dir, output_dir, num_augmented=5):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    for filename in os.listdir(input_dir):
-        process_image(filename, input_dir, output_dir, num_augmented)
+    # for filename in os.listdir(input_dir):
+    #     process_image(filename, input_dir, output_dir, num_augmented)
 
 
-    # with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
-    #     pool.starmap(process_image, [(filename, input_dir, output_dir, num_augmented) for filename in filenames])
+    with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
+        pool.starmap(process_image, [(filename, input_dir, output_dir, num_augmented) for filename in os.listdir(input_dir)])
 
 
 if __name__ == '__main__':
