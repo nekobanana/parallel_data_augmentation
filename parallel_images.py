@@ -4,7 +4,7 @@ import cv2
 import albumentations as A
 import multiprocessing
 
-from common import transformations
+from common import transformations, input_folder, output_folder, num_augmented
 
 
 def apply_transformation(image, output_dir, filename, i):
@@ -24,22 +24,13 @@ def process_image(filename, input_dir, output_dir, num_augmented):
     for i in range(num_augmented):
         apply_transformation(image, output_dir, filename, i)
 
-    # with multiprocessing.Pool(processes=min(num_augmented, multiprocessing.cpu_count())) as pool:
-    #     pool.starmap(apply_transformation,
-    #                  [(image, output_dir, filename, i) for i in range(num_augmented)])
 
 def augment_images(input_dir, output_dir, num_augmented=5):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-
-    # for filename in os.listdir(input_dir):
-    #     process_image(filename, input_dir, output_dir, num_augmented)
-
     with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
         pool.starmap(process_image, [(filename, input_dir, output_dir, num_augmented) for filename in os.listdir(input_dir)])
 
 
 if __name__ == '__main__':
-    input_folder = "input_images"
-    output_folder = "output_images"
-    augment_images(input_folder, output_folder, num_augmented=5)
+    augment_images(input_folder, output_folder, num_augmented=num_augmented)

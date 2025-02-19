@@ -4,7 +4,7 @@ import random
 import cv2
 import albumentations as A
 
-from common import transformations
+from common import transformations, input_folder, output_folder, num_augmented
 
 
 def augment_images(input_dir, output_dir, num_augmented=5):
@@ -25,6 +25,4 @@ def augment_images(input_dir, output_dir, num_augmented=5):
 
 
 if __name__ == '__main__':
-    input_folder = "input_images"
-    output_folder = "output_images"
-    augment_images(input_folder, output_folder, num_augmented=5)
+    augment_images(input_folder, output_folder, num_augmented=100)

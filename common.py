@@ -7,3 +7,7 @@ transformations = [
         A.Blur(blur_limit=(3, 5), p=1),
         A.CLAHE(clip_limit=(1, 4), p=1)
     ]
+
+input_folder = "input_images"
+output_folder = "output_images"
+num_augmented = 100
