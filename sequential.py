@@ -13,14 +13,7 @@ def augment_images(input_dir, output_dir, num_augmented=5):
 
     for filename in os.listdir(input_dir):
         input_path = os.path.join(input_dir, filename)
-        if not os.path.isfile(input_path):
-            continue
-
         image = cv2.imread(input_path)
-        if image is None:
-            print(f'Error reading {filename}')
-            continue
-
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         for i in range(num_augmented):
             transform_n = random.randint(0, len(transformations))

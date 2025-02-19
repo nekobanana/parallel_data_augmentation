@@ -18,14 +18,7 @@ def apply_transformation(image, output_dir, filename, i):
 
 def process_image(filename, input_dir, output_dir, num_augmented):
     input_path = os.path.join(input_dir, filename)
-    # if not os.path.isfile(input_path):
-    #     return
-
     image = cv2.imread(input_path)
-    # if image is None:
-    #     print(f'Error reading {filename}')
-    #     return
-
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
     for i in range(num_augmented):
@@ -35,14 +28,12 @@ def process_image(filename, input_dir, output_dir, num_augmented):
     #     pool.starmap(apply_transformation,
     #                  [(image, output_dir, filename, i) for i in range(num_augmented)])
 
-
 def augment_images(input_dir, output_dir, num_augmented=5):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
     # for filename in os.listdir(input_dir):
     #     process_image(filename, input_dir, output_dir, num_augmented)
-
 
     with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
         pool.starmap(process_image, [(filename, input_dir, output_dir, num_augmented) for filename in os.listdir(input_dir)])
