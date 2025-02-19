@@ -4,17 +4,12 @@ import random
 import cv2
 import albumentations as A
 
+from common import transformations
+
+
 def augment_images(input_dir, output_dir, num_augmented=5):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-
-    transformations = [
-        A.RandomBrightnessContrast(brightness_limit=(0.2, 0.8), contrast_limit=(0.2, 0.8), p=1),
-        A.GaussNoise(std_range=(0.2, 0.8), mean_range=(-0.8, 0.8), p=1),
-        A.RandomGamma(gamma_limit=(80, 120), p=1),
-        A.Blur(blur_limit=(3, 5), p=1),
-        A.CLAHE(clip_limit=(1, 4), p=1)
-    ]
 
     for filename in os.listdir(input_dir):
         input_path = os.path.join(input_dir, filename)
