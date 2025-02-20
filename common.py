@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 import random
 import albumentations as A
@@ -27,4 +28,18 @@ def get_parsed_args(parallel: bool = True):
     parser.add_argument("-a", "--num_augmented", type=int, required=True, help="Number of augmented images to generate per input image")
     if parallel:
         parser.add_argument("-p", "--processes", type=int, required=True, help="Number of parallel processes")
+    parser.add_argument("-r", "--result_file", type=str, required=True, help="Path to the result file")
     return parser.parse_args()
+
+def write_output_to_file(end_time, num_processes, num_augmented, result_file, start_time):
+    result = {
+        'num_processes': num_processes,
+        'num_augmented': num_augmented,
+        'time': end_time - start_time
+    }
+    print(f'Execution time: {end_time - start_time} seconds')
+    if result_file:
+        if not os.path.exists(os.path.dirname(result_file)):
+            os.makedirs(os.path.dirname(result_file))
+        with open(result_file, 'w') as f:
+            json.dump(result, f)
