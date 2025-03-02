@@ -20,7 +20,7 @@ def augment_images(input_dir, output_dir, num_augmented, num_processes, result_f
             pool.starmap(apply_transformation, [(image, output_dir, filename, i) for i in range(num_augmented)])
 
     end_time = time.time()
-    write_output_to_file(end_time, 1, num_augmented, result_file, start_time)
+    write_output_to_file(end_time, num_processes, num_augmented, result_file, start_time)
 
 
 if __name__ == '__main__':
