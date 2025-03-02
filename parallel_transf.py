@@ -17,7 +17,8 @@ def augment_images(input_dir, output_dir, num_augmented, num_processes, result_f
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         with multiprocessing.Pool(processes=num_processes) as pool:
-            pool.starmap(apply_transformation, [(image, output_dir, filename, i) for i in range(num_augmented)])
+            r = pool.starmap_async(apply_transformation, [(image, output_dir, filename, i) for i in range(num_augmented)])
+            r.wait()
 
     end_time = time.time()
     write_output_to_file(end_time, num_processes, num_augmented, result_file, start_time)

@@ -21,7 +21,8 @@ def augment_images(input_dir, output_dir, num_augmented, num_processes, result_f
     start_time = time.time()
 
     with multiprocessing.Pool(processes=num_processes) as pool:
-        pool.starmap(process_image, [(filename, input_dir, output_dir, num_augmented) for filename in os.listdir(input_dir)])
+        r = pool.starmap_async(process_image, [(filename, input_dir, output_dir, num_augmented) for filename in os.listdir(input_dir)])
+        r.wait()
 
     end_time = time.time()
     write_output_to_file(end_time, num_processes, num_augmented, result_file, start_time)
