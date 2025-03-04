@@ -11,14 +11,12 @@ def augment_images(input_dir, output_dir, num_augmented, num_processes, result_f
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     start_time = time.time()
-    for filename in os.listdir(input_dir):
-        input_path = os.path.join(input_dir, filename)
-        image = cv2.imread(input_path)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-        with multiprocessing.Pool(processes=num_processes) as pool:
-            r = pool.starmap_async(apply_transformation, [(image, output_dir, filename, i) for i in range(num_augmented)])
-            r.wait()
+    with multiprocessing.Pool(processes=num_processes) as pool:
+        for filename in os.listdir(input_dir):
+            input_path = os.path.join(input_dir, filename)
+            image = cv2.imread(input_path)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            pool.starmap(apply_transformation, [(image, output_dir, filename, i) for i in range(num_augmented)])
 
     end_time = time.time()
     write_output_to_file(end_time, num_processes, num_augmented, result_file, start_time)
