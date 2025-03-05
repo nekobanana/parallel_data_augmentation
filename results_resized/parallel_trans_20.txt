@@ -1,0 +1,1 @@
+{"num_processes": 20, "num_augmented": 40, "time": 3.2246005535125732}

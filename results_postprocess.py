@@ -1,13 +1,16 @@
 import os
 import json
+import re
+
 import matplotlib.pyplot as plt
 
 
-def read_experiment_results(folder, base_filename):
+def read_experiment_results(folder, base_filename, sequential_filename):
     results = {}
 
     for file in os.listdir(folder):
-        if file.startswith(base_filename) and file.endswith(".txt"):
+        name_regex = re.compile(f'^{base_filename}\\d+')
+        if file == sequential_filename or name_regex.match(file):
             filepath = os.path.join(folder, file)
             with open(filepath, "r") as f:
                 data = json.load(f)
@@ -32,7 +35,7 @@ def plot_results(results, output_folder, base_filename):
     plt.title("Execution time")
     plt.grid()
     plt.legend()
-    plt.savefig(os.path.join(output_folder, f"{base_filename}_execution_time.png"))
+    plt.savefig(os.path.join(output_folder, f"{base_filename}execution_time.png"))
     plt.show()
 
     base_time = times[0]
@@ -49,16 +52,19 @@ def plot_results(results, output_folder, base_filename):
     plt.title("Speedup")
     plt.grid()
     plt.legend()
-    plt.savefig(os.path.join(output_folder, f"{base_filename}_speedup.png"))
+    plt.savefig(os.path.join(output_folder, f"{base_filename}speedup.png"))
     plt.show()
 
 
 if __name__ == "__main__":
-    folder = "./results"
-    base_filename = "parallel_trans"
-    # base_filename = "parallel_images"
-    output_folder = "./plots"
+    # folder = "./results"
+    folder = "./results_resized"
+    # base_filename = "parallel_trans_"
+    base_filename = "parallel_images_"
+    sequential_filename = "seq.txt"
+    # output_folder = "./plots"
+    output_folder = "./plots_resized"
     os.makedirs(output_folder, exist_ok=True)
 
-    results = read_experiment_results(folder, base_filename)
+    results = read_experiment_results(folder, base_filename, sequential_filename)
     plot_results(results, output_folder, base_filename)
